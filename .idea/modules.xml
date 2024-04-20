@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/TD_Language_Analysis.iml" filepath="$PROJECT_DIR$/.idea/TD_Language_Analysis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Language_Complexity_Proxy_Measurement.iml" filepath="$PROJECT_DIR$/.idea/Language_Complexity_Proxy_Measurement.iml" />
     </modules>
   </component>
 </project>
