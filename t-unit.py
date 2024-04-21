@@ -50,19 +50,40 @@ alltext = ("""I like the movie we saw about Moby Dick, the white whale. The capt
 
 # Loop through sentences split by spaCy dependency parser
 def structural_complexity(text):
+    main_clause_count = 0
     t_unit_count = 0
-    fin_count = clause_count(text)
-    complexity = 1
+    clause = False
+    fin_verb = False
+    subj = False
+
     for sn in text.sents:
-        print(sn)
-        t_unit_count += 1
+        #print(sn)
+        main_clause_count += 1
         in_cconj = False
         fin_verb_in_cconj = False
         subj_in_cconj = False
         prev_pos = None
         for token in sn:
-            print(token.dep_)
+            # count clauses
+            if 'VerbForm=Fin' in token.morph:
+                #print(token.text)
+                fin_verb = True
 
+            if token.dep_ == 'nsubj':
+                subj = True
+
+            if fin_verb and subj:
+                print('clause')
+                clause = True
+                subj = False
+                fin_verb = False
+
+            # count of main clauses and subordinate clauses (t_units)
+            if clause:
+                t_unit_count += 1
+                clause = False
+
+            # split main clauses connected by cconj and increas t-unit count
             if token.pos_ == 'SCONJ' and prev_pos != 'CCONJ':
                 in_cconj = False
             if token.pos_ == 'CCONJ':
@@ -75,13 +96,11 @@ def structural_complexity(text):
                 fin_verb_in_cconj = True
                 in_cconj = False
                 subj_in_cconj = False
-
-                t_unit_count +=1
+                main_clause_count +=1
             prev_pos = token.pos_
 
-    complexity = fin_count / t_unit_count
-    print(fin_count)
-    print(t_unit_count)
+    complexity = t_unit_count / main_clause_count
+
     return complexity
 
 complexity = structural_complexity(nlp(alltext))
